@@ -1,0 +1,31 @@
+{% for post in posts_page_obj %}
+            <div class="col-lg-6 col-md-6 col-sm-6">
+              <div class="categories__post__item">
+                <div
+                  class="categories__post__item__pic small__item set-bg"
+                  data-setbg="{{ post.featured_image_1.url }}"
+                >
+                  <div class="post__meta">
+                    <h4>{{post.created_at|date:"d"}}</h4>
+                    <span>{{ post.created_at|date:"M" }}</span>
+                  </div>
+                </div>
+                <div class="categories__post__item__text">
+                  <span class="post__label">{{ post.category }}</span>
+                  <h3>
+                    <a href="{% url 'blogs' post.slug %}"
+                      >{{ post.title }}</a
+                    >
+                  </h3>
+                  <ul class="post__widget">
+                    <li>by <span>{{ post.author }}</span></li>
+                    <li>{{ post.created_at|timesince }} ago</li>
+                    <li>20 Comment</li>
+                  </ul>
+                  <p>
+                    {{ post.short_description|truncatewords:30 }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            {% endfor %}

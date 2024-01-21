@@ -1,0 +1,103 @@
+{% load static %}
+<div class="col-lg-4 col-md-4">
+    <div class="sidebar__item">
+      <div class="sidebar__about__item">
+        <div class="sidebar__item__title">
+          <h6>About Us</h6>
+        </div>
+        <img src="{% static 'images/logolotus.jpg' %}" alt="" />
+        <p>
+          Antarmanah Mental Healthcare Services provides accessible,
+          ethical, and affordable online psychological support,
+          specializing in a range of mental health disorders and
+          personal challenges.
+        </p>
+        <a href="{% url 'about' %}" class="primary-btn">Read more</a>
+      </div>
+      <div class="sidebar__follow__item">
+        <div class="sidebar__item__title">
+          <h6>Follow me</h6>
+        </div>
+        <div class="sidebar__item__follow__links">
+          <a href="https://www.threads.net/@antarmanah.mentalhealthcare" target="_blank"><i class="fa-brands fa-threads"></i></a>
+          <a href="https://x.com/AntarmanahMHS?t=S49tcHGqaLktQYnBOOkvFg&s=08" target="_blank"><i class="fa-brands fa-x-twitter"></i></a>
+          <a href="https://youtube.com/@antarmanmentalhealthservic3330?feature=shared" target="_blank"><i class="fa fa-youtube-play"></i></a>
+          <a href="https://www.instagram.com/antarmanah.mentalhealthcare?utm_source=qr&igsh=MWNqeHlra3B5cXEybw==" target="_blank"><i class="fa fa-instagram"></i></a>
+          <a href="mailto:antarmanmhs@gmail.com"><i class="fa fa-envelope-o"></i></a>
+        </div>
+      </div>
+      <div class="sidebar__feature__item">
+        <div class="sidebar__item__title">
+          <h6>Recent Posts</h6>
+        </div>
+        {% for post in posts %}
+        {% if forloop.first %}
+        <div
+          class="sidebar__feature__item__large set-bg bg-image-darken"
+          data-setbg="{{ post.featured_image_1.url }}"
+        >
+          <div class="sidebar__feature__item__large--text">
+            <span>{{ post.category }}</span>
+            <h5>
+              <a href="{% url 'blogs' post.slug %}"
+                >{{ post.title }}</a
+              >
+            </h5>
+          </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+        <div class="sidebar__feature__item__list">
+          {% for post in posts %}
+          {% if not forloop.first %}
+          <div class="sidebar__feature__item__list__single">
+            <div class="post__meta">
+              <h4>{{ post.updated_at|date:"d" }}</h4>
+              <span>{{ post.updated_at|date:"M" }}</span>
+            </div>
+            <div class="post__text">
+              <span>{{ post.category }}</span>
+              <h5>
+                <a href="{% url 'blogs' post.slug %}">{{ post.title }}</a>
+              </h5>
+            </div>
+          </div>
+          {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+      <div class="sidebar__item__banner">
+        <img src="{% static 'images/banner.jpg' %}" alt="" />
+      </div>
+      <div class="sidebar__item__categories">
+        <div class="sidebar__item__title">
+          <h6>Categories</h6>
+        </div>
+        <ul>
+          {% for cat in categories %}
+          <li>
+            <a href="{% url 'posts_by_category' cat.id %}">{{ cat.category_name }} <span>{{ cat.published_blog_count }}</span></a>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="sidebar__subscribe__item">
+        <div class="sidebar__item__title">
+          <h6>Subscribe</h6>
+        </div>
+        <p>
+          Subscribe and get our newest updates right in
+          your inbox.
+        </p>
+        <form action="{{ request.path }}" method="POST">
+          {% csrf_token %}
+          <input
+            type="email"
+            class="email-input"
+            placeholder="Your email"
+          />
+          <button type="submit" class="site-btn">Subscribe</button>
+        </form>
+      </div>
+    </div>
+  </div>

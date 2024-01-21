@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+
+<section class="categories categories-grid spad">
+    <div class="categories__post">
+        <div class="container">
+            <div class="categories__grid__post">
+                <div class="row">
+                    <div class="col-lg-8 col-md-8">
+                        <div class="breadcrumb__text">
+                            <h2>Search Results for: <span>{{ keyword }}</span></h2>
+                        </div>
+                        {% if blogs.object_list %}
+                        {% for post in blogs %}
+                        <div class="categories__list__post__item">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6">
+                                    <div class="categories__post__item__pic set-bg"
+                                        data-setbg="{{ post.featured_image_1.url }}">
+                                        <div class="post__meta">
+                                            <h4>{{ post.updated_at|date:"d" }}</h4>
+                                            <span>{{ post.updated_at|date:"M" }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6">
+                                    <div class="categories__post__item__text">
+                                        <span class="post__label">{{ category }}</span>
+                                        <h3><a href="{% url 'blogs' post.slug %}">{{ post.title }}</a></h3>
+                                        <ul class="post__widget">
+                                            <li>by <span>{{ post.author }}</span></li>
+                                            <li>{{ post.created_at | timesince }} ago</li>
+                                            <li>{{ post.comment_count }} Comment{{ post.comment_count|pluralize }}</li>
+                                        </ul>
+                                        <p>{{ post.short_description | truncatewords:25 }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% else %}
+                        <p>No Posts Found...</p>
+                        {% endif %}
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="categories__pagination">
+                                    {% if blogs.has_previous %}
+                                    <a href="?keyword={{ keyword }}&page=1">&laquo; first</a>
+                                    {% endif %}
+
+                                    {% for num in blogs.paginator.page_range %}
+                                    {% if blogs.number == num %}
+                                    <a href="?keyword={{ keyword }}&page={{ num }}" class="active">{{ num }}</a>
+                                    {% else %}
+                                    <a href="?keyword={{ keyword }}&page={{ num }}">{{ num }}</a>
+                                    {% endif %}
+                                    {% endfor %}
+
+                                    {% if blogs.has_next %}
+                                    <a href="?keyword={{ keyword }}&page={{ blogs.paginator.num_pages }}">last &raquo;</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

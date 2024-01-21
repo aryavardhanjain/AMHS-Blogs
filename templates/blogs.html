@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+
+    <!-- Single Post Section Begin -->
+    <section class="single-post spad">
+        <div class="single-post__hero set-bg" data-setbg="{{ single_blog.featured_image_1.url }}"></div>
+        <div class="container">
+            <div class="row d-flex justify-content-center">
+                <div class="col-lg-8">
+                    <div class="single-post__title">
+                        <div class="single-post__title__meta">
+                            <h2>{{ single_blog.created_at|date:"d" }}</h2>
+                            <span>{{ single_blog.created_at|date:"M" }}</span>
+                        </div>
+                        <div class="single-post__title__text">
+                            <ul class="label">
+                                <li>{{ single_blog.category }}</li>
+                            </ul>
+                            <h4>{{ single_blog.title }}</h4>
+                            <ul class="widget">
+                                <li>by {{ single_blog.author }}</li>
+                                <li>{{ single_blog.created_at|timesince }} ago</li>
+                                <li>{{ comment_count }} comments</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="single-post__social__item">
+                        <ul>
+                            <li><a href="https://www.threads.net/@antarmanah.mentalhealthcare" target="_blank"><i class="fa-brands fa-threads"></i></a></li>
+                            <li><a href="https://x.com/AntarmanahMHS?t=S49tcHGqaLktQYnBOOkvFg&s=08" target="_blank"><i class="fa-brands fa-x-twitter"></i></a></li>
+                            <li><a href="https://youtube.com/@antarmanmentalhealthservic3330?feature=shared" target="_blank"><i class="fa fa-youtube-play"></i></a></li>
+                            <li><a href="https://www.instagram.com/antarmanah.mentalhealthcare?utm_source=qr&igsh=MWNqeHlra3B5cXEybw==" target="_blank"><i class="fa fa-instagram"></i></a></li>
+                            <li><a href="mailto:antarmanmhs@gmail.com"><i class="fa fa-envelope-o"></i></a></li>
+                        </ul>
+                    </div>
+                    <div class="single-post__top__text">
+                        <p>{{ single_blog.introduction|safe }}</p>
+                    </div>
+                    <div class="single-post__recipe__details">
+                        <div class="single-post__recipe__details__option">
+                            {{ single_blog.short_description }}
+                        </div>
+                    </div>
+                    <div class="single-post__desc">
+                        <h4>{{ single_blog.subheading_1 }}</h4>
+                        <p>{{ single_blog.para_1 }}</p>
+                    </div>
+                    <div class="single-post__quote">
+                        <p>{{ single_blog.quote }}</p>
+                        <span>- {{ single_blog.quote_author }}</span>
+                    </div>
+                    <div class="single-post__desc">
+                        <h4>{{ single_blog.subheading_2 }}</h4>
+                    </div>
+                    <div class="single-post__more__details">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6">
+                                <img src="{{ single_blog.featured_image_2.url }}" alt="">
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <p>{{ single_blog.para_2|linebreaksbr }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="single-post__desc">
+                        <h4>
+                            {{ single_blog.subheading_3 }}
+                        </h4>
+                        <p>{{ single_blog.para_3|linebreaksbr }}</p>
+                    </div>
+                    <div class="single-post__desc">
+                        <h4>{{ single_blog.subheading_4 }}</h4>
+                    </div>
+                    <div class="single-post__last__text">
+                        <p>{{ single_blog.para_4|linebreaksbr }}</p>
+                    </div>
+                    <div class="single-post__next__previous">
+                        <div class="row">
+                            {% if previous_post %}
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <a href="{% url 'blogs' previous_post.slug %}" class="single-post__previous">
+                                    <h6><span class="arrow_carrot-left"></span> Previous posts</h6>
+                                    <div class="single-post__previous__meta">
+                                        <h4>{{ previous_post.created_at|date:"d" }}</h4>
+                                        <span>{{ previous_post.created_at|date:"M" }}</span>
+                                    </div>
+                                    <div class="single-post__previous__text">
+                                        <span>{{ previous_post.category }}</span>
+                                        <h5>{{ previous_post.title }}</h5>
+                                    </div>
+                                </a>
+                            </div>
+                            {% endif %}
+                            {% if next_post %}
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <a href="{% url 'blogs' next_post.slug %}" class="single-post__next">
+                                    <h6>Next posts <span class="arrow_carrot-right"></span> </h6>
+                                    <div class="single-post__next__meta">
+                                        <h4>{{ next_post.created_at|date:"d" }}</h4>
+                                        <span>{{ next_post.created_at|date:"M" }}</span>
+                                    </div>
+                                    <div class="single-post__next__text">
+                                        <span>{{ next_post.category }}</span>
+                                        <h5>{{ next_post.title }}</h5>
+                                    </div>
+                                </a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="single-post__comment" data-post-slug="{{ single_blog.slug }}">
+                        <div class="widget__title">
+                            <h4><span id="comment-count">{{ comment_count }}</span> Comment{{ comment_count|pluralize }}</h4>
+                        </div>
+                        {% for comment in comments %}
+                        <div class="single-post__comment__item" data-comment-id="{{ comment.id }}">
+                            <div class="single-post__comment__item__text">
+                                <h5>{{ comment.name }}</h5>
+                                <span>{{ comment.created_at|date:"d M Y" }}</span>
+                                <p>{{ comment.message }}</p>
+                                {% if user.is_authenticated %}
+                                <ul>
+                                    <li>
+                                        <a href="javascript:void(0);" class="like-comment" data-comment-id="{{ comment.id }}">
+                                            {% if request.user in comment.likes.all %}
+                                            <i class="fa fa-heart"></i>
+                                            {% else %}
+                                            <i class="fa fa-heart-o"></i>
+                                            {% endif %}
+                                        </a>
+                                    </li>
+                                </ul>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% empty %}
+                        <p class="no-comments-message">No comments yet.</p>
+                        {% endfor %}
+                    </div>
+                    <div class="single-post__leave__comment">
+                        <div class="widget__title">
+                            <h4>Leave a comment</h4>
+                        </div>
+                        {% if user.is_authenticated %}
+                        <form id="comment-form" method="POST">
+                            {% csrf_token %}
+                            <div class="input-list">
+                                {{ form.name }}
+                                {{ form.email }}
+                            </div>
+                            {{ form.message }}
+                            <button type="submit" class="site-btn">Submit</button>
+                        </form>
+                        {% else %}
+                        <h3>Please <a href="{% url 'register' %}?next={{ request.path }}">Login/Register</a> to post a comment! </h3>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Single Post Section End -->
+ 
+{% endblock %}
