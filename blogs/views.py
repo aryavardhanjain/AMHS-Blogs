@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Blog, Category, Comment, CustomUser
+from .models import Blog, Category, Comment, CustomUser, Subscriber
 from django.db.models import Q, Count
 from django.core.paginator import Paginator
 from .forms import CommentForm, UserRegistrationForm
@@ -22,6 +22,34 @@ def posts_by_category(request, category_id):
     posts = paginator.get_page(page_number)
     
     category = get_object_or_404(Category, id=category_id)
+
+    if request.method == 'POST' and 'subscribe' in request.POST:
+        email = request.POST['email'].strip()
+        if email:
+            username = email.split('.')[0].split('@')[0]
+            subscriber, created = Subscriber.objects.get_or_create(email=email)
+
+            if created:
+                mail_subject = 'Thank you for subscribing! '
+                email_template = 'emails/subscription_email.html'
+                context = {
+                    'domain': request.get_host(),
+                    'subscriber_email': subscriber.email,
+                    'username': username.capitalize(),
+                }
+
+                email_response = send_subscription_email(subscriber.email, mail_subject, email_template, context)
+                if email_response['success']:
+                    messages.success(request, 'Subscription successful! Check your email for confirmation. ')
+                else:
+                    messages.error(request, email_response["message"])
+                return redirect(request.path)
+            else:
+                messages.info(request, 'You are already subscribed. ')
+        else:
+            messages.error(request, 'Please provide a valid email address. ')
+        return redirect(request.path)
+
     context = {
         'recent_posts': recent_posts,
         'posts': posts,

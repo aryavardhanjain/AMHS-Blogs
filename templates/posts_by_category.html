@@ -142,7 +142,8 @@
                                     <p>Subscribe to our newsletter and get our newest updates right on your inbox.</p>
                                     <form action="{{ request.path }}" method="POST">
                                         {% csrf_token %}
-                                        <input type="email" class="email-input" placeholder="Your email">
+                                        <input type="email" name="email" class="email-input" placeholder="Your email">
+                                        <input type="hidden" name="subscribe" value="1">
                                         <button type="submit" class="site-btn">Subscribe</button>
                                     </form>
                                 </div>

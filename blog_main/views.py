@@ -82,3 +82,13 @@ def contact(request):
         'instagram_handle': 'Antarman: Mental Heathcare Services'
     }
     return render(request, 'contact.html', context)
+
+def unsubscribe(request, email):
+    try:
+        subscriber = Subscriber.objects.get(email=email)
+        subscriber.delete()
+        messages.success(request, 'You have successfully unsubscribed! Sorry to see you go :(')
+        return redirect('home')
+    except Subscriber.DoesNotExist:
+        messages.error(request, 'Invalid request. ')
+        return redirect('home')

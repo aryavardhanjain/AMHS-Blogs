@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from .utils import send_new_blog_email
 
 # Create your models here.
 class CustomUserManager(BaseUserManager):
@@ -86,6 +87,14 @@ class Blog(models.Model):
 
     def __str__(self):
         return self.title
+    
+    def save(self, *args, **kwargs):
+        is_new = self._state.adding
+
+        super().save(*args, **kwargs)
+
+        if is_new and self.status == 'Published':
+            send_new_blog_email(self)
 
 class Contact(models.Model):
     name = models.CharField(max_length=50, blank=False)

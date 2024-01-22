@@ -35,5 +35,6 @@ urlpatterns = [
     path('logout/', BlogsView.logout, name='logout'),
     path('category/', include('blogs.urls')),
     path('accounts/', include('allauth.urls')),
+    path('unsubscribe/<str:email>/', views.unsubscribe, name='unsubscribe'),
     # path('blogs/', include('blogs.urls')),
 ] +static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
